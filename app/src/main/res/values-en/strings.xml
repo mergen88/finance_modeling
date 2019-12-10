@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">FinanceModeling</string>
+
+    <string name="load_error">Не удалось загрузить</string>
+
+    <string name="five_day">5 days</string>
+    <string name="one_month">1 month</string>
+    <string name="six_months">6 months</string>
+    <string name="one_year">1 year</string>
+    <string name="five_years">5 years</string>
+    <string name="company_name">Company name:</string>
+    <string name="price">Price:</string>
+</resources>
