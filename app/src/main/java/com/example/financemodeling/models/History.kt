@@ -1,4 +1,4 @@
-package com.example.financemodeling.api.models
+package com.example.financemodeling.models
 
 import com.google.gson.annotations.SerializedName
 import java.util.*

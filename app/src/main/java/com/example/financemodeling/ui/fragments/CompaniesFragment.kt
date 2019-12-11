@@ -1,31 +1,53 @@
 package com.example.financemodeling.ui.fragments
 
-import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
+import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.financemodeling.App
 import com.example.financemodeling.R
 import com.example.financemodeling.adapter.CompanyAdapter
-import com.example.financemodeling.api.models.Company
+import com.example.financemodeling.models.Company
+import com.example.financemodeling.presenter.CompaniesPresenter
+import com.example.financemodeling.views.CompaniesView
+import com.example.financemodeling.views.MainView
 import kotlinx.android.synthetic.main.fragment_companies.*
+import javax.inject.Inject
 
 
-class CompaniesFragment : Fragment() {
+class CompaniesFragment : Fragment(), CompaniesView {
 
+
+    @Inject lateinit var presenter: CompaniesPresenter
     private var companyAdapter: CompanyAdapter? = null
-    private var listener: OnFragmentInteractionListener? = null
-    val companiesLiveData = MutableLiveData<List<Company>?>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        listener?.loadCompanies()
+        App.component.inject(this)
+        presenter.loadCompanies()
+    }
+
+    override fun onCompaniesLoaded(companies: List<Company>) {
+        companyAdapter?.addItems(companies)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presenter.injectView(this)
+    }
+
+    override fun onError() {
+        Toast.makeText(context, R.string.load_error, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        presenter.onPause()
     }
 
     override fun onCreateView(
@@ -40,7 +62,7 @@ class CompaniesFragment : Fragment() {
         initViews()
     }
 
-    private fun initViews() {
+    override fun initViews() {
         context?.let {
             if (companyAdapter == null) {
                 companyAdapter = CompanyAdapter(it, onItemClickListener)
@@ -62,38 +84,26 @@ class CompaniesFragment : Fragment() {
         })
     }
 
+    override fun hideProgress() {
+        if (activity is MainView) {
+            (activity as MainView).hideProgress()
+        }
+    }
+
+    override fun showProgress() {
+        if (activity is MainView) {
+            (activity as MainView).showProgress()
+        }
+    }
+
     private val onItemClickListener = object : CompanyAdapter.OnItemClickListener{
         override fun onItemClick(item: Company) {
-            listener?.loadCompany(item.symbol)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        companiesLiveData.observe(this, Observer {
-            it?.let {
-                    companies -> companyAdapter?.addItems(companies)
+            if (activity is MainView) {
+                (activity as MainView).loadFragment(HistoriesFragment.newInstance(item.symbol))
             }
-        })
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        this.listener = null
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            this.listener = context
         }
     }
 
-    interface OnFragmentInteractionListener {
-
-        fun loadCompanies()
-        fun loadCompany(symbol: String)
-    }
 }
 
 

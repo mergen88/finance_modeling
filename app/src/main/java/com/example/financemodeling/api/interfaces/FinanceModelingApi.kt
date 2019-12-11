@@ -1,7 +1,7 @@
 package com.example.financemodeling.api.interfaces
 
-import com.example.financemodeling.api.models.Companies
-import com.example.financemodeling.api.models.Histories
+import com.example.financemodeling.models.Companies
+import com.example.financemodeling.models.Histories
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

@@ -1,7 +1,7 @@
 package com.example.financemodeling.adapter
 
 import android.widget.Filter
-import com.example.financemodeling.api.models.Company
+import com.example.financemodeling.models.Company
 
 class CompanyFilter(private val filterList: List<Company>, val adapter: CompanyAdapter): Filter() {
 

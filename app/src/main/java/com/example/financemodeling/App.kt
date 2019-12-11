@@ -6,7 +6,10 @@ import com.example.financemodeling.di.components.DaggerAppComponent
 
 class App: Application() {
 
-    lateinit var component: AppComponent
+    companion object {
+        lateinit var component: AppComponent
+    }
+
 
     override fun onCreate() {
         super.onCreate()

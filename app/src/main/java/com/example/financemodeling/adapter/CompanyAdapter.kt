@@ -8,7 +8,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
 import com.example.financemodeling.R
-import com.example.financemodeling.api.models.Company
+import com.example.financemodeling.models.Company
 import kotlinx.android.synthetic.main.company_item.view.*
 
 class CompanyAdapter(private val context: Context, val itemClickListener: OnItemClickListener): RecyclerView.Adapter<ViewHolder>(), Filterable {
